@@ -23,6 +23,7 @@ import plotting
 import output
 import engine
 import turbulence
+import shutil
 
 # Global variables (optional, could be managed within a class)
 step_count_total = 0
@@ -1333,4 +1334,20 @@ if __name__ == "__main__":
          traceback.print_exc()
          print("="*60)
     finally:
+        print("\n--- Finalizing Run ---")
+        try:
+            # config.py を結果ディレクトリにコピー
+            source_config_path = 'config.py'
+            # 分かりやすいように別名を付けてコピーする (例: config_run.py)
+            destination_config_path = os.path.join(config.OUTPUT_DIR, 'config_run.py')
+            
+            if os.path.exists(source_config_path):
+                shutil.copy2(source_config_path, destination_config_path)
+                print(f"Successfully copied config file to: {destination_config_path}")
+            else:
+                print(f"Warning: Could not find source config file at '{source_config_path}' to copy.")
+
+        except Exception as e_copy:
+            print(f"ERROR: Failed to copy config file. Details: {e_copy}")
+        
         print("\nProgram finished.")
